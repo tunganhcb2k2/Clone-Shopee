@@ -76,4 +76,7 @@ export const schema = yup.object({
     .oneOf([yup.ref('password')], 'Nhập lại password không khớp')
 })
 
+export const loginSchema = schema.omit(['confirm_password'])
+
 export type Schema = yup.InferType<typeof schema>
+export type LoginSchema = yup.InferType<typeof loginSchema>
