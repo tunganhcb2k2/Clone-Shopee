@@ -10,6 +10,7 @@ import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import type { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/Input'
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/Button'
 
 type FormData = Omit<Schema, 'confirm_password'>
 
@@ -77,12 +78,14 @@ export default function Login() {
               />
 
               <div className='mt-3'>
-                <button
+                <Button
                   type='submit'
-                  className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                  className='w-full text-center cursor-pointer py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                  isLoading={loginMutation.isPending}
+                  disabled={loginMutation.isPending}
                 >
                   Đăng nhập
-                </button>
+                </Button>
               </div>
               <div className='flex item-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn chưa có tài khoản?</span>
