@@ -20,3 +20,8 @@ export function formatNumberToSocialStyle(value: number) {
     .replace('.', ',')
     .toLowerCase()
 }
+
+// Loại bỏ undefined trong của key optional
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
+}
