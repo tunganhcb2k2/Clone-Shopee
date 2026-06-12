@@ -1,4 +1,3 @@
-import type { rest } from 'lodash'
 import InputNumber, { type InputNumberProps } from '../InputNumber'
 
 interface Props extends InputNumberProps {

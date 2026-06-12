@@ -66,17 +66,16 @@ export default function useRouteElements() {
               <Register />
             </RegisterLayout>
           )
-        },
-        {
-          path: path.productDetail,
-          index: true,
-          element: (
-            <MainLayout>
-              <ProductDetail />
-            </MainLayout>
-          )
         }
       ]
+    },
+    {
+      path: path.productDetail,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
     }
   ])
   return routeElements
