@@ -29,8 +29,25 @@ export default function Cart() {
       refetch()
     }
   })
+
+  const buyProductsMutation = useMutation({
+    mutationFn: purchaseApi.buyProducts,
+    onSuccess: () => {
+      refetch()
+    }
+  })
+
+  const deletePurchasesMutation = useMutation({
+    mutationFn: purchaseApi.deletePurchase,
+    onSuccess: () => {
+      refetch()
+    }
+  })
+
   const purchasesIncart = purchasesInCartData?.data.data
   const isAllChecked = extendedPurchases.every((purchase) => purchase.checked)
+  const checkedPurchases = extendedPurchases.filter((purchase) => purchase.checked)
+  const checkedPurchasesCount = checkedPurchases.length
 
   useEffect(() => {
     setExtendedPurchases((prev) => {
@@ -85,6 +102,16 @@ export default function Cart() {
     )
   }
 
+  const handleDelete = (purchaseIndex: number) => () => {
+    const purchaseId = extendedPurchases[purchaseIndex]._id
+    deletePurchasesMutation.mutate([purchaseId])
+  }
+
+  const handleDeleteManyPurchases = () => {
+    const purchasesIds = checkedPurchases.map((purchase) => purchase._id)
+    deletePurchasesMutation.mutate(purchasesIds)
+  }
+
   return (
     <div className='bg-neutral-100 py-16'>
       <div className='container'>
@@ -117,7 +144,7 @@ export default function Cart() {
               {extendedPurchases?.map((purchase, index) => (
                 <div
                   key={purchase._id}
-                  className='first:mt-0  grid grid-cols-12 text-center rounded-sm border border-gray-200 bg-white py-5 px-4 text-sm text-gray-500 mb-5'
+                  className='first:mt-0 items-center  grid grid-cols-12 text-center rounded-sm border border-gray-200 bg-white py-5 px-4 text-sm text-gray-500 mb-5'
                 >
                   <div className='col-span-6'>
                     <div className='flex'>
@@ -185,7 +212,10 @@ export default function Cart() {
                         </span>
                       </div>
                       <div className='col-span-1'>
-                        <button className='bg-none cursor-pointer text-black transition-colors hover:text-orange'>
+                        <button
+                          onClick={handleDelete(index)}
+                          className='bg-none cursor-pointer text-black transition-colors hover:text-orange'
+                        >
                           Xóa
                         </button>
                       </div>
@@ -209,7 +239,9 @@ export default function Cart() {
             <button className='mx-3 border-none bg-none cursor-pointer' onClick={handleCheckAll}>
               Chọn tất cả ({extendedPurchases.length})
             </button>
-            <button className='mx-3 border-none bg-none cursor-pointer'>Xóa</button>
+            <button onClick={handleDeleteManyPurchases} className='mx-3 border-none bg-none cursor-pointer'>
+              Xóa
+            </button>
           </div>
 
           <div className='sm:ml-auto flex flex-col sm:flex-row sm:items-center mt-5 sm:mt-0'>
