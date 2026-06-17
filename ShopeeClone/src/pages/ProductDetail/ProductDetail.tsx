@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import ProductRating from '../../components/ProductRating'
@@ -14,8 +14,10 @@ import { queryClient } from '../../main'
 import { purchasesStatus } from '../../constants/purchase'
 import { toast } from 'react-toastify'
 import path from '../../constants/path'
+import { AppContext } from '../../contexts/app.context'
 
 export default function ProductDetail() {
+  const { isAuthenticated } = useContext(AppContext)
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
@@ -95,6 +97,11 @@ export default function ProductDetail() {
   }
 
   const addToCart = () => {
+    if (!isAuthenticated) {
+      navigate(path.login)
+      return
+    }
+
     addToCartMutation.mutate(
       { buy_count: buyCount, product_id: product?._id as string },
       {
@@ -109,6 +116,11 @@ export default function ProductDetail() {
   }
 
   const buyNow = async () => {
+    if (!isAuthenticated) {
+      navigate(path.login)
+      return
+    }
+
     const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
     const purchase = res.data.data
     navigate(path.cart, {

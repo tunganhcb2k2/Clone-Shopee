@@ -1,5 +1,4 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
-import { string } from 'yup'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
